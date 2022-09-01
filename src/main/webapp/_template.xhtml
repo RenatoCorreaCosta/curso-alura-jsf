@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<h:outputStylesheet name="primeicons/primeicons.css"
+			library="primefaces" />
+</h:head>			
+<h:body>
+
+	<div id="cabecalho">
+		<h:graphicImage library="img" name="logo.png" />
+
+		<p:growl id="messages" showDetail="true" autoUpdate="true" sticky="true"/>		
+		<!-- (acima) 
+		    sticky: através dessa config é preciso fechar a mensagens explicitamente
+			showDetail: mostra também os detalhes da mensagem
+			autoUpdate: o componente se atualiza sozinho 
+		-->
+
+		<h:form rendered="#{usuarioLogado!=null}">
+
+			<p:menuButton value="Menu">
+				<p:menuitem value="Livros" action="livro?faces-redirect=true"  />
+				<p:menuitem value="Autores" action="autor?faces-redirect=true"  />
+				<p:separator />
+				<p:menuitem value="Logout" action="#{loginBean.deslogar}"
+					icon="pi pi-external-link" />
+			</p:menuButton>
+		</h:form>
+
+		<h:form rendered="#{usuarioLogado!=null}">
+
+			<p:panelGrid columns="3">
+				<h:outputLabel value="Usuário Logado:  #{usuarioLogado.email}" />
+				<h:outputLabel value="indoSurf:  #{indoSurf}" />
+
+				<h:commandLink action="#{loginBean.deslogar}" value="Logout" />
+
+
+				<h:commandLink action="livro?faces-redirect=true" value="Livros" />
+
+				<h:commandLink action="autor?faces-redirect=true" value="Autores" />
+
+				<h:commandLink action="carousel-livros?faces-redirect=true"
+					value="Carousel - livros" />
+
+				<h:commandLink action="ring-livros?faces-redirect=true"
+					value="Ring - livros" />
+			</p:panelGrid>
+		</h:form>
+
+
+		<h1>
+			<ui:insert name="titulo"></ui:insert>
+		</h1>
+	</div>
+
+	<div id="conteudo">
+		<ui:insert name="conteudo"></ui:insert>
+	</div>
+</h:body>
+
+
+</html>

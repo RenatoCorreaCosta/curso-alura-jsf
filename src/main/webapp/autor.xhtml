@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="_template.xhtml">
+	<f:metadata>
+		<f:viewParam name="autorId" value="#{autorBean.autorId}" />
+		<f:viewAction action="#{autorBean.carregarAutorPelaId}"
+			if="#{param.autorId != null}" />
+	</f:metadata>
+
+	<ui:define name="titulo">
+		<p:outputPanel> Novo Autor </p:outputPanel>
+	</ui:define>
+
+	<ui:define name="conteudo">
+		
+
+		<h:form id="frmCadastro">
+			<p:fieldset legend="Dados do Autor">
+				<p:messages id="messages" showDetail="false" closable="true"
+					globalOnly="true" />
+
+				<p:panelGrid columns="3">
+					<p:outputLabel value="Nome:" for="nome" />
+					<p:inputText id="nome" value="#{autorBean.autor.nome}"
+						required="true" requiredMessage="Informe o nome do autor"
+						validatorMessage="Mínimo: 5 carateres">
+						<f:validateLength minimum="5" />
+					</p:inputText>
+					<p:message for="nome" id="messageNome" />
+
+					<p:outputLabel value="Contato:" for="contato" />
+					<p:inputText id="contato" value="#{autorBean.autor.contato}"
+						required="true" requiredMessage="Informe o contato do autor"
+						validator="#{autorBean.validaContatoAutor}">
+					</p:inputText>
+					<p:message for="contato" id="messageContato" />
+
+					<p:outputLabel value="E-mail:" for="email" />
+					<p:inputText id="email" value="#{autorBean.autor.email}"
+						validatorMessage="Email inválido">
+						<f:passThroughAttribute name="placeholder" value="Email do autor" />
+						<f:attribute name="type" value="email" />
+						<f:validateRegex pattern=".+@.+" />
+					</p:inputText>
+					<p:message for="email" id="messageEmail" />
+
+					<p:commandButton value="Gravar" action="#{autorBean.gravar}"
+						process="@form" update="@form :formTabelaAutores" />
+				</p:panelGrid>
+			</p:fieldset>
+		</h:form>
+		<h:form id="formTabelaAutores">
+			<p:dataList value="#{autorBean.autores}" var="autor"
+				type="definition">
+				<f:facet name="header">
+						Autores
+					</f:facet>
+
+				<p:commandLink styleClass="ui-icon ui-icon-pencil"
+					style="float:left;margin-right:10px" update=":frmCadastro">
+					<f:setPropertyActionListener target="#{autorBean.autor}"
+						value="#{autor}" />
+				</p:commandLink>
+
+				<p:commandLink action="#{autorBean.remover(autor)}"
+					styleClass="ui-icon ui-icon-trash"
+					style="float:left;margin-right:10px" update=":frmCadastro">
+					<!--  ou update="@form" -> atualiza todo o formulario, independente do seu id -->
+					<f:ajax render=":form" />
+				</p:commandLink>
+
+				#{autor.nome} - #{autor.email}
+
+			</p:dataList>
+
+			<p:fieldset legend="Autores - temp -> c/ JSF puro">
+				<h:dataTable value="#{autorBean.autores}" var="autor"
+					id="tabelaAutores">
+					<h:column>
+						<f:facet name="header">Id</f:facet>
+						<h:outputText value="#{autor.id}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Nome</f:facet>
+						<h:outputText value="#{autor.nome}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Contato</f:facet>
+						<h:outputText value="#{autor.contato}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">E-mail</f:facet>
+						<h:outputText value="#{autor.email}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Alterar</f:facet>
+						<h:commandLink value="altera"
+							action="#{autorBean.carregar(autor)}">
+							<f:ajax render=":form" />
+						</h:commandLink>
+					</h:column>
+					<h:column>
+						<f:facet name="header">Alterar 2 (seta propriedade do bean via JSF)</f:facet>
+						<h:commandLink value="Altera 2">
+							<f:setPropertyActionListener target="#{autorBean.autor}"
+								value="#{autor}" />
+						</h:commandLink>
+					</h:column>
+					<h:column>
+						<f:facet name="header">Remover</f:facet>
+						<h:commandLink value="remove" action="#{autorBean.remover(autor)}">
+							<f:ajax render=":form" />
+						</h:commandLink>
+					</h:column>
+				</h:dataTable>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

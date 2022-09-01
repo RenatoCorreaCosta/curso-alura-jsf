@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<ui:composition template="_template.xhtml">
+
+	<ui:define name="titulo"> 
+		<p:outputPanel>
+			Login
+		</p:outputPanel>		 
+	</ui:define>
+
+	<ui:define name="conteudo">
+		<h:form id="frmLogin">
+			<p:fieldset legend="Login">
+
+				<p:messages id="messages" globalOnly="true" showDetail="true" />
+
+				<h:panelGrid columns="3">
+					<p:outputLabel value="Email:" for="email" />
+					<p:inputText id="email" value="#{loginBean.usuario.email}"
+						required="true" requiredMessage="Informe o email de login">
+						<f:passThroughAttribute name="type" value="email" />
+					</p:inputText>
+					<p:message for="email" id="msgEmail" />
+					<p:outputLabel value="Senha (com inputSecret):" for="senha" />
+					<p:password id="senha" value="#{loginBean.usuario.senha}"
+						required="true" feedback="true" goodLabel="Bom" weakLabel="Fraca"
+						strongLabel="Forte"
+						requiredMessage="Informe a senha para autenticação">
+					</p:password>
+					<p:message for="senha" id="msgSenha" />
+
+					<p:commandButton value="Login" action="#{loginBean.efetuaLogin}"
+						process="@form" update="@form" />
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>
